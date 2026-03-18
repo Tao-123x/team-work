@@ -1,0 +1,40 @@
+{
+  "pages": [
+    {
+      "path": "pages/entry-demo/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/entry-demo/splash",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/entry-demo/login",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/entry-demo/register",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/entry-iterations/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Dorm Takeaway Help",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f4f6fb"
+  }
+}

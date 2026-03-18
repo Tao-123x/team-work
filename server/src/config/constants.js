@@ -1,0 +1,14 @@
+export const ORDER_STATUS = {
+  POSTED: "posted",
+  ACCEPTED: "accepted",
+  PICKED_UP: "picked_up",
+  DELIVERED: "delivered",
+  COMPLETED: "completed",
+  CANCELLED: "cancelled"
+};
+
+export const ALLOWED_STATUS_TRANSITIONS = {
+  [ORDER_STATUS.ACCEPTED]: ORDER_STATUS.PICKED_UP,
+  [ORDER_STATUS.PICKED_UP]: ORDER_STATUS.DELIVERED,
+  [ORDER_STATUS.DELIVERED]: ORDER_STATUS.COMPLETED
+};

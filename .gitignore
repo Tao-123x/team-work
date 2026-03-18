@@ -4,3 +4,15 @@ Glossary of Terms.pdf
 Weather Care Push System - Project Plan.docx
 团队项目评估规范.docx
 术语表.docx
+client/node_modules/
+client/dist/
+client/unpackage/
+client/node_modules_icloud_backup_*/
+client/*.icloud-backup
+client/*.icloud-backup-*.json
+client/src/*.icloud-backup
+client/src/**/*.icloud-backup
+server/node_modules/
+server/data/
+__pycache__/
+tmp/

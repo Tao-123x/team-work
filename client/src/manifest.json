@@ -1,0 +1,17 @@
+{
+  "name": "Dorm Takeaway Help",
+  "appid": "__UNI__DORM_TAKEAWAY_HELP",
+  "description": "Dorm last-meter takeaway handoff app.",
+  "versionName": "0.1.0",
+  "versionCode": "1",
+  "transformPx": false,
+  "h5": {
+    "title": "Dorm Takeaway Help"
+  },
+  "mp-weixin": {
+    "appid": "",
+    "setting": {
+      "urlCheck": false
+    }
+  }
+}
