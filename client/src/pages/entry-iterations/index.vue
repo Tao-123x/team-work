@@ -57,19 +57,42 @@ const iterations = [
         The same login flow evolves across three levels so your team can show a clear design
         iteration story in class.
       </text>
+
+      <view class="header-grid">
+        <view class="header-panel lead">
+          <text class="header-panel-label">Design review note</text>
+          <text class="header-panel-title">Keep every version visible so the iteration story is obvious.</text>
+          <text class="header-panel-copy">
+            This board is useful in class because it shows rough, refined, and polished work side by side instead of only presenting the final screen.
+          </text>
+        </view>
+
+        <view class="header-panel metrics">
+          <view class="header-metric">
+            <text class="header-metric-value">V1-V3</text>
+            <text class="header-metric-copy">Visible progression from wireframe feel to product feel</text>
+          </view>
+          <view class="header-metric">
+            <text class="header-metric-value">Demo B</text>
+            <text class="header-metric-copy">Current chosen direction for the next real flow</text>
+          </view>
+        </view>
+      </view>
     </view>
 
     <view class="iteration-list">
       <view v-for="item in iterations" :key="item.id" class="iteration-section">
-        <view class="meta">
-          <view>
-            <text class="meta-label">{{ item.label }}</text>
-            <text class="meta-title">{{ item.title }}</text>
+        <text class="watermark">{{ item.id.replace('v', '0') }}</text>
+        <view class="content-wrapper">
+          <view class="meta">
+            <view>
+              <text class="meta-label">{{ item.label }}</text>
+              <text class="meta-title">{{ item.title }}</text>
+            </view>
+            <text class="meta-tone">{{ item.tone }}</text>
           </view>
-          <text class="meta-tone">{{ item.tone }}</text>
-        </view>
 
-        <view class="showcase-row">
+          <view class="showcase-row">
           <view class="phone-frame">
             <view class="phone-screen" :class="item.shellClass">
               <view class="status-bar">
@@ -133,6 +156,7 @@ const iterations = [
             <text class="note-body">{{ item.note }}</text>
           </view>
         </view>
+        </view>
       </view>
     </view>
   </view>
@@ -141,14 +165,86 @@ const iterations = [
 <style scoped>
 .page {
   min-height: 100vh;
-  padding: 28rpx 24rpx 48rpx;
-  background:
-    radial-gradient(circle at top left, rgba(25, 159, 86, 0.1), transparent 25%),
-    linear-gradient(180deg, #f4faf5, #e8eef9);
+  padding: 32rpx 24rpx 56rpx;
+  background: 
+    radial-gradient(circle at top right, rgba(10, 78, 189, 0.15), transparent 45%),
+    radial-gradient(circle at bottom left, rgba(25, 159, 86, 0.15), transparent 45%),
+    linear-gradient(180deg, #f0fdf6, #e8f0fe);
 }
 
 .header {
   margin-bottom: 28rpx;
+}
+
+.header-grid {
+  display: grid;
+  grid-template-columns: 1.24fr 1fr;
+  gap: 18rpx;
+  margin-top: 28rpx;
+}
+
+.header-panel {
+  padding: 28rpx;
+  border-radius: 30rpx;
+  background: rgba(255, 255, 255, 0.54);
+  backdrop-filter: blur(22rpx);
+  -webkit-backdrop-filter: blur(22rpx);
+  border: 1rpx solid rgba(255, 255, 255, 0.82);
+  box-shadow: 0 18rpx 36rpx rgba(15, 23, 42, 0.05);
+}
+
+.header-panel.lead {
+  background: linear-gradient(180deg, rgba(8, 17, 31, 0.93), rgba(10, 78, 189, 0.84));
+}
+
+.header-panel-label {
+  display: block;
+  font-size: 20rpx;
+  letter-spacing: 2rpx;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.64);
+}
+
+.header-panel-title {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 36rpx;
+  line-height: 1.18;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.header-panel-copy {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.metrics {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14rpx;
+}
+
+.header-metric-value {
+  display: block;
+  font-size: 46rpx;
+  line-height: 1;
+  font-weight: 900;
+  color: #08111f;
+}
+
+.header-metric-copy {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 23rpx;
+  line-height: 1.45;
+  color: #526072;
+  font-weight: 600;
 }
 
 .eyebrow {
@@ -180,11 +276,36 @@ const iterations = [
 }
 
 .iteration-section {
-  margin-bottom: 32rpx;
-  padding: 28rpx;
-  border-radius: 34rpx;
-  background: rgba(255, 255, 255, 0.84);
-  box-shadow: 0 20rpx 48rpx rgba(15, 23, 42, 0.08);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 64rpx;
+  padding: 48rpx;
+  border-radius: 48rpx;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(48rpx);
+  -webkit-backdrop-filter: blur(48rpx);
+  border: 2rpx solid rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 40rpx 80rpx rgba(15, 23, 42, 0.08),
+    inset 0 4rpx 20rpx rgba(255, 255, 255, 0.5);
+}
+
+.watermark {
+  position: absolute;
+  top: -40rpx;
+  right: -20rpx;
+  font-size: 320rpx;
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.03);
+  z-index: 0;
+  pointer-events: none;
+  letter-spacing: -16rpx;
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 1;
 }
 
 .meta {
@@ -205,18 +326,21 @@ const iterations = [
 
 .meta-title {
   display: block;
-  font-size: 42rpx;
-  font-weight: 800;
-  color: #08111f;
+  font-size: 64rpx;
+  line-height: 0.95;
+  font-weight: 900;
+  letter-spacing: -2rpx;
+  color: var(--text-strong, #0f172a);
 }
 
 .meta-tone {
-  padding: 10rpx 18rpx;
+  padding: 12rpx 24rpx;
   border-radius: 999px;
   background: rgba(10, 78, 189, 0.08);
   color: #0a4ebd;
-  font-size: 22rpx;
-  font-weight: 700;
+  font-size: 24rpx;
+  font-weight: 800;
+  backdrop-filter: blur(8rpx);
 }
 
 .showcase-row {
@@ -226,12 +350,28 @@ const iterations = [
 }
 
 .phone-frame {
-  width: 390rpx;
-  min-width: 390rpx;
-  padding: 14rpx;
-  border-radius: 42rpx;
-  background: #0b1020;
-  box-shadow: 0 24rpx 50rpx rgba(15, 23, 42, 0.14);
+  position: relative;
+  width: 420rpx;
+  min-width: 420rpx;
+  padding: 20rpx;
+  border-radius: 56rpx;
+  background: linear-gradient(135deg, #1e293b, #070d19);
+  box-shadow: 
+    0 40rpx 80rpx rgba(15, 23, 42, 0.3),
+    inset 0 4rpx 12rpx rgba(255, 255, 255, 0.2),
+    inset 0 -8rpx 16rpx rgba(0, 0, 0, 0.6);
+  border: 4rpx solid #334155;
+  overflow: hidden;
+}
+
+.phone-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 56rpx;
+  background: linear-gradient(105deg, rgba(255, 255, 255, 0.15) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 10;
 }
 
 .phone-screen {
@@ -242,15 +382,15 @@ const iterations = [
 }
 
 .rough-shell {
-  background: linear-gradient(180deg, #f7f7f7, #ececec);
+  background: linear-gradient(180deg, #f8fafc, #e2e8f0);
 }
 
 .mid-shell {
-  background: linear-gradient(180deg, #eef7f1, #dff0e6);
+  background: linear-gradient(180deg, #ebfdf3, #bbf0d2);
 }
 
 .polished-shell {
-  background: linear-gradient(180deg, #eef7f1, #d5e8ff);
+  background: linear-gradient(180deg, #f0f8ff, #c8e4fc);
 }
 
 .status-bar {
@@ -495,23 +635,27 @@ const iterations = [
 }
 
 .login-card {
-  padding: 22rpx;
-  border-radius: 28rpx;
+  padding: 24rpx;
+  border-radius: 32rpx;
 }
 
 .rough-card {
-  background: rgba(255,255,255,0.88);
-  border: 2rpx solid rgba(15, 23, 42, 0.08);
+  background: rgba(255,255,255,0.9);
+  border: 2rpx dashed rgba(15, 23, 42, 0.15);
 }
 
 .mid-card {
-  background: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.96);
   box-shadow: 0 16rpx 36rpx rgba(15, 23, 42, 0.05);
+  border: 1rpx solid rgba(25, 159, 86, 0.1);
 }
 
 .polished-card {
-  background: rgba(255,255,255,0.95);
-  box-shadow: 0 20rpx 40rpx rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16rpx);
+  -webkit-backdrop-filter: blur(16rpx);
+  border: 2rpx solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 20rpx 48rpx rgba(0, 0, 0, 0.05);
 }
 
 .card-title {
@@ -562,9 +706,11 @@ const iterations = [
 }
 
 .polished-input {
-  background: #f8fafc;
-  color: #334155;
-  box-shadow: inset 0 0 0 2rpx rgba(15, 23, 42, 0.04);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12rpx);
+  color: #0f172a;
+  border: 2rpx solid rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 2rpx 8rpx rgba(15, 23, 42, 0.03);
 }
 
 .primary-cta,
@@ -608,13 +754,16 @@ const iterations = [
 }
 
 .polished-button {
-  background: #111111;
+  background: linear-gradient(135deg, #1a202c, #000000);
   color: #ffffff;
+  box-shadow: 0 12rpx 24rpx rgba(0, 0, 0, 0.2);
 }
 
 .polished-secondary {
-  background: rgba(10, 78, 189, 0.08);
-  color: #0a4ebd;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8rpx);
+  border: 1rpx solid rgba(255, 255, 255, 0.9);
+  color: #0f172a;
 }
 
 .iteration-note {

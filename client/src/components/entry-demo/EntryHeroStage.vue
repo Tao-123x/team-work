@@ -92,26 +92,27 @@ const stageStyle = computed(() => ({
 .glow {
   position: absolute;
   border-radius: 999px;
-  filter: blur(18rpx);
-  opacity: 0.22;
+  filter: blur(40rpx);
+  opacity: 0.35;
+  mix-blend-mode: multiply;
 }
 
 .glow-left {
-  width: 180rpx;
-  height: 180rpx;
+  width: 220rpx;
+  height: 220rpx;
   background: var(--accent);
-  left: 10rpx;
-  top: 18rpx;
-  animation: glowFloat 5.2s ease-in-out infinite;
+  left: -20rpx;
+  top: -20rpx;
+  animation: glowFloat 6s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
 }
 
 .glow-right {
-  width: 160rpx;
-  height: 160rpx;
+  width: 200rpx;
+  height: 200rpx;
   background: var(--secondary);
-  right: 16rpx;
-  bottom: 20rpx;
-  animation: glowFloat 4.4s ease-in-out infinite reverse;
+  right: -20rpx;
+  bottom: -20rpx;
+  animation: glowFloat 7s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate-reverse;
 }
 
 .bell-shell {
@@ -215,27 +216,32 @@ const stageStyle = computed(() => ({
 .stack-card {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 28rpx;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 32rpx;
   padding: 24rpx;
-  box-shadow: 0 18rpx 40rpx rgba(15, 23, 42, 0.08);
+  box-shadow: 
+    0 24rpx 60rpx rgba(0, 0, 0, 0.12),
+    inset 0 2rpx 0 rgba(255, 255, 255, 1);
+  border: 1rpx solid rgba(255, 255, 255, 0.6);
 }
 
 .back {
-  transform: translate(-24rpx, 20rpx) rotate(-8deg);
-  background: rgba(157, 228, 180, 0.55);
-  animation: floatCardBack 4.8s ease-in-out infinite;
+  transform: translate(-30rpx, 24rpx) rotate(-10deg);
+  background: rgba(187, 240, 210, 0.65);
+  backdrop-filter: blur(10rpx);
+  animation: floatCardBack 6s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
 }
 
 .middle {
-  transform: translate(18rpx, -8rpx) rotate(7deg);
-  background: rgba(33, 98, 216, 0.14);
-  animation: floatCardMiddle 4.2s ease-in-out infinite reverse;
+  transform: translate(24rpx, -12rpx) rotate(8deg);
+  background: rgba(41, 121, 255, 0.18);
+  backdrop-filter: blur(10rpx);
+  animation: floatCardMiddle 5.5s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate-reverse;
 }
 
 .front {
   transform: translateY(0) rotate(-2deg);
-  animation: riseFadeCard 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation: riseFadeCard 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .stack-dot,
@@ -364,14 +370,15 @@ const stageStyle = computed(() => ({
 .route-dot {
   position: absolute;
   top: 64rpx;
-  width: 26rpx;
-  height: 26rpx;
+  width: 32rpx;
+  height: 32rpx;
   border-radius: 999px;
   background: linear-gradient(135deg, var(--accent), var(--secondary));
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.15);
 }
 
 .route-dot.moving {
-  animation: moveDot 3.4s cubic-bezier(0.22, 0.68, 0.22, 1) infinite;
+  animation: moveDot 3.4s cubic-bezier(0.22, 0.8, 0.22, 1) infinite;
 }
 
 .route-halo {

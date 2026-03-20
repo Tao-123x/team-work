@@ -42,6 +42,14 @@ function goToRegister() {
       <text class="chip alt">{{ theme.deliveryTag }}</text>
     </view>
 
+    <view class="story-panel">
+      <text class="story-kicker">{{ theme.splash.kicker }}</text>
+      <text class="story-copy">
+        The splash screen sets the tone before the user interacts with the real system. It is meant
+        to show trust, speed, and a more campus-specific product identity.
+      </text>
+    </view>
+
     <view class="metrics">
       <view class="metric-card">
         <text class="metric-value">3s</text>
@@ -82,46 +90,102 @@ function goToRegister() {
 
 .metrics {
   display: flex;
-  gap: 16rpx;
-  margin: 22rpx 0 26rpx;
+  gap: 24rpx;
+  margin: 32rpx 0 40rpx;
+}
+
+.story-panel {
+  margin-top: 24rpx;
+  padding: 28rpx;
+  border-radius: 30rpx;
+  background: rgba(9, 17, 31, 0.88);
+  box-shadow: 0 24rpx 52rpx rgba(15, 23, 42, 0.16);
+}
+
+.story-kicker {
+  display: block;
+  font-size: 26rpx;
+  line-height: 1.45;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.story-copy {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.74);
 }
 
 .metric-card {
   flex: 1;
-  padding: 22rpx;
-  border-radius: 24rpx;
-  background: rgba(255, 255, 255, 0.78);
+  padding: 40rpx 32rpx;
+  border-radius: 40rpx;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(48rpx);
+  -webkit-backdrop-filter: blur(48rpx);
+  border: 2rpx solid rgba(255, 255, 255, 0.6);
+  box-shadow: 
+    0 32rpx 64rpx rgba(15, 23, 42, 0.06),
+    inset 0 4rpx 20rpx rgba(255, 255, 255, 0.5);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.metric-card:hover {
+  transform: translateY(-8rpx) scale(1.02);
 }
 
 .metric-value {
   display: block;
-  font-size: 40rpx;
-  font-weight: 800;
-  color: #0f172a;
+  font-size: 64rpx;
+  font-weight: 900;
+  letter-spacing: -3rpx;
+  color: var(--text-strong);
 }
 
 .metric-label {
   display: block;
-  margin-top: 8rpx;
-  font-size: 22rpx;
-  color: #526072;
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text-muted);
 }
 
 .primary-btn,
 .secondary-btn {
-  border-radius: 999px;
-  font-size: 26rpx;
-  font-weight: 700;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: 900;
+  height: 112rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .primary-btn {
-  background: #111111;
-  color: #ffffff;
+  background: var(--text-strong);
+  color: var(--panel);
+  box-shadow: 0 32rpx 64rpx rgba(0, 0, 0, 0.2);
+}
+
+.primary-btn:active {
+  transform: scale(0.96) translateY(8rpx);
+  box-shadow: 0 12rpx 24rpx rgba(0, 0, 0, 0.15);
 }
 
 .secondary-btn {
-  margin-top: 14rpx;
-  background: rgba(255, 255, 255, 0.78);
-  color: #0f172a;
+  margin-top: 24rpx;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(32rpx);
+  border: 2rpx solid rgba(255, 255, 255, 0.7);
+  color: var(--text-strong);
+  box-shadow: 0 16rpx 40rpx rgba(0, 0, 0, 0.05);
+}
+
+.secondary-btn:active {
+  transform: scale(0.96);
+  background: rgba(255, 255, 255, 0.9);
 }
 </style>

@@ -40,6 +40,11 @@ function goToRegister() {
         <text class="form-copy">Designed for bold first-screen focus and quick action.</text>
       </view>
 
+      <view class="info-ribbon">
+        <text class="ribbon-label">Why this version works</text>
+        <text class="ribbon-copy">{{ theme.login.highlight }}</text>
+      </view>
+
       <view class="field">
         <text class="label">Student ID</text>
         <input v-model="form.studentId" class="input" placeholder="2026xxxx" />
@@ -68,80 +73,145 @@ function goToRegister() {
 }
 
 .form-head {
-  margin-bottom: 20rpx;
+  margin-bottom: 40rpx;
+}
+
+.info-ribbon {
+  margin-bottom: 26rpx;
+  padding: 24rpx 26rpx;
+  border-radius: 28rpx;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.42));
+  border: 1rpx solid rgba(255, 255, 255, 0.82);
+}
+
+.ribbon-label {
+  display: block;
+  font-size: 20rpx;
+  letter-spacing: 2rpx;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #64748b;
+}
+
+.ribbon-copy {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  line-height: 1.55;
+  color: var(--text-strong);
+  font-weight: 700;
 }
 
 .form-title {
   display: block;
-  font-size: 40rpx;
-  font-weight: 800;
-  color: #0f172a;
+  font-size: 56rpx;
+  font-weight: 900;
+  letter-spacing: -2rpx;
+  color: var(--text-strong);
 }
 
 .form-copy {
   display: block;
-  margin-top: 10rpx;
-  font-size: 24rpx;
-  color: #526072;
-  line-height: 1.55;
+  margin-top: 16rpx;
+  font-size: 28rpx;
+  color: var(--text-muted);
+  line-height: 1.5;
 }
 
 .field {
-  margin-bottom: 18rpx;
+  margin-bottom: 24rpx;
 }
 
 .label {
   display: block;
-  margin-bottom: 10rpx;
+  margin: 0 0 10rpx 8rpx;
   font-size: 22rpx;
-  font-weight: 700;
-  color: #334155;
+  font-weight: 800;
+  letter-spacing: 1rpx;
+  color: rgba(15, 23, 42, 0.62);
 }
 
 .input {
   width: 100%;
-  height: 96rpx;
-  border-radius: 24rpx;
-  background: rgba(248, 250, 252, 0.96);
-  padding: 0 24rpx;
-  font-size: 28rpx;
-  box-shadow: inset 0 0 0 2rpx rgba(15, 23, 42, 0.04);
+  height: 112rpx;
+  border-radius: 36rpx;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(48rpx);
+  -webkit-backdrop-filter: blur(48rpx);
+  border: 2rpx solid rgba(255, 255, 255, 0.6);
+  padding: 0 40rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  box-shadow: 
+    0 24rpx 60rpx rgba(0, 0, 0, 0.04),
+    inset 0 4rpx 10rpx rgba(255, 255, 255, 0.5);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--text-strong);
+}
+
+.input:focus-within {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 1);
+  transform: translateY(-4rpx) scale(1.02);
+  box-shadow: 0 40rpx 80rpx rgba(15, 23, 42, 0.08);
 }
 
 .primary-btn,
 .quick-btn {
-  border-radius: 999px;
-  font-size: 26rpx;
-  font-weight: 700;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: 900;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 112rpx;
 }
 
 .primary-btn {
-  margin-top: 8rpx;
-  background: #111111;
-  color: #ffffff;
+  margin-top: 32rpx;
+  background: var(--text-strong);
+  color: var(--panel);
+  box-shadow: 0 32rpx 64rpx rgba(0, 0, 0, 0.2);
+}
+
+.primary-btn:active {
+  transform: scale(0.96) translateY(8rpx);
+  box-shadow: 0 12rpx 24rpx rgba(0, 0, 0, 0.15);
 }
 
 .quick-btn {
-  margin-top: 14rpx;
-  background: rgba(17, 76, 149, 0.09);
-  color: #114c95;
+  margin-top: 24rpx;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(32rpx);
+  border: 2rpx solid rgba(255, 255, 255, 0.6);
+  color: var(--text-strong);
+  box-shadow: 0 16rpx 40rpx rgba(0, 0, 0, 0.05);
+}
+
+.quick-btn:active {
+  transform: scale(0.96);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .footer-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 16rpx;
   align-items: center;
-  margin-top: 20rpx;
+  margin-top: 48rpx;
 }
 
 .footer-copy {
-  color: #64748b;
-  font-size: 22rpx;
+  color: var(--text-muted);
+  font-size: 26rpx;
+  font-weight: 500;
 }
 
 .footer-link {
-  color: #1e7b4d;
-  font-size: 22rpx;
-  font-weight: 700;
+  color: var(--text-strong);
+  font-size: 26rpx;
+  font-weight: 800;
+  text-decoration: underline;
 }
 </style>
