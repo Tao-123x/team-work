@@ -1,33 +1,51 @@
 {
   "pages": [
     {
-      "path": "pages/entry-demo/index",
+      "path": "pages/auth/splash",
       "style": {
         "navigationStyle": "custom"
       }
     },
     {
-      "path": "pages/entry-demo/splash",
+      "path": "pages/auth/login",
       "style": {
         "navigationStyle": "custom"
       }
     },
     {
-      "path": "pages/entry-demo/login",
+      "path": "pages/auth/register",
       "style": {
         "navigationStyle": "custom"
       }
     },
     {
-      "path": "pages/entry-demo/register",
+      "path": "pages/home/index",
       "style": {
         "navigationStyle": "custom"
       }
     },
     {
-      "path": "pages/entry-iterations/index",
+      "path": "pages/create-order/index",
       "style": {
-        "navigationStyle": "custom"
+        "navigationBarTitleText": "Create Request"
+      }
+    },
+    {
+      "path": "pages/my-orders/index",
+      "style": {
+        "navigationBarTitleText": "My Orders"
+      }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": {
+        "navigationBarTitleText": "Profile"
+      }
+    },
+    {
+      "path": "pages/order-detail/index",
+      "style": {
+        "navigationBarTitleText": "Order Detail"
       }
     }
   ],

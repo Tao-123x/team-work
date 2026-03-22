@@ -1,19 +1,32 @@
 import { defineStore } from "pinia";
 import { login } from "../api/auth";
 
-const DEMO_USER = {
-  user_id: 1,
-  student_id: "20260001",
-  nickname: "Demo User",
-  dorm_building: "Dorm A",
-  floor_no: "6",
-  room_no: "602",
-  token: "local-demo-token"
-};
+const STORAGE_KEY = "teamwork-user";
+
+function getStoredUser() {
+  try {
+    return uni.getStorageSync(STORAGE_KEY) || null;
+  } catch {
+    return null;
+  }
+}
+
+function persistUser(user) {
+  try {
+    if (user) {
+      uni.setStorageSync(STORAGE_KEY, user);
+      return;
+    }
+
+    uni.removeStorageSync(STORAGE_KEY);
+  } catch {
+    // Ignore storage failures in demo mode.
+  }
+}
 
 export const useUserStore = defineStore("user", {
   state: () => ({
-    currentUser: DEMO_USER,
+    currentUser: getStoredUser(),
     loading: false
   }),
   getters: {
@@ -29,9 +42,17 @@ export const useUserStore = defineStore("user", {
           user_id: result.user_id,
           token: result.token
         };
+        persistUser(this.currentUser);
       } finally {
         this.loading = false;
       }
+    },
+    async registerWithProfile(profile) {
+      await this.loginWithProfile(profile);
+    },
+    logout() {
+      this.currentUser = null;
+      persistUser(null);
     }
   }
 });

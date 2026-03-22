@@ -68,12 +68,12 @@ export function listOrders({ status = ORDER_STATUS.POSTED, dorm_building, page =
   const values = [];
 
   if (status) {
-    clauses.push("status = ?");
+    clauses.push("o.status = ?");
     values.push(status);
   }
 
   if (dorm_building) {
-    clauses.push("dorm_building = ?");
+    clauses.push("o.dorm_building = ?");
     values.push(dorm_building);
   }
 
@@ -81,17 +81,20 @@ export function listOrders({ status = ORDER_STATUS.POSTED, dorm_building, page =
   const list = db
     .prepare(
       `
-      SELECT *
-      FROM delivery_orders
+      SELECT
+        o.*,
+        requester.nickname AS requester_nickname
+      FROM delivery_orders o
+      JOIN users requester ON requester.id = o.requester_id
       ${whereClause}
-      ORDER BY created_at DESC
+      ORDER BY o.created_at DESC
       LIMIT ? OFFSET ?
       `
     )
     .all(...values, Number(page_size), offset);
 
   const total = db
-    .prepare(`SELECT COUNT(*) AS total FROM delivery_orders ${whereClause}`)
+    .prepare(`SELECT COUNT(*) AS total FROM delivery_orders o ${whereClause}`)
     .get(...values).total;
 
   return { list, total };
