@@ -1,5 +1,18 @@
 import { API_BASE_URL } from "../utils/constants";
 
+function getAuthHeader() {
+  try {
+    const user = uni.getStorageSync("teamwork-user");
+    if (user?.token) {
+      return { Authorization: `Bearer ${user.token}` };
+    }
+  } catch {
+    // Ignore storage failures in demo mode.
+  }
+
+  return {};
+}
+
 export function request(options) {
   return new Promise((resolve, reject) => {
     uni.request({
@@ -8,6 +21,7 @@ export function request(options) {
       data: options.data || {},
       header: {
         "Content-Type": "application/json",
+        ...getAuthHeader(),
         ...(options.header || {})
       },
       success: (response) => {

@@ -62,6 +62,12 @@ function appendStatusLog(orderId, operatorId, fromStatus, toStatus, actionNote =
   ).run(orderId, operatorId, fromStatus, toStatus, actionNote);
 }
 
+function throwStaleWriteError() {
+  const error = new Error("Order state changed, please refresh and try again");
+  error.status = 409;
+  throw error;
+}
+
 export function listOrders({ status = ORDER_STATUS.POSTED, dorm_building, page = 1, page_size = 20 }) {
   const offset = (Number(page) - 1) * Number(page_size);
   const clauses = [];
@@ -117,6 +123,13 @@ export function listMyOrders(userId, role) {
 }
 
 export function createOrder(payload) {
+  const serviceFee = Number(payload.service_fee);
+  if (Number.isNaN(serviceFee) || serviceFee < 0) {
+    const error = new Error("service_fee must be greater than or equal to 0");
+    error.status = 400;
+    throw error;
+  }
+
   const orderNo = generateOrderNo();
   const result = db
     .prepare(
@@ -146,7 +159,7 @@ export function createOrder(payload) {
       payload.room_no,
       payload.takeaway_type || null,
       payload.note || null,
-      Number(payload.service_fee || 0),
+      serviceFee,
       ORDER_STATUS.POSTED,
       payload.deadline_at || null
     );
@@ -164,13 +177,17 @@ export function acceptOrder(orderId, helperId) {
     throw error;
   }
 
-  db.prepare(
+  const result = db.prepare(
     `
     UPDATE delivery_orders
     SET helper_id = ?, status = ?, accepted_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
-    WHERE id = ? AND status = ?
+    WHERE id = ? AND status = ? AND helper_id IS NULL
     `
   ).run(helperId, ORDER_STATUS.ACCEPTED, orderId, ORDER_STATUS.POSTED);
+
+  if (!result.changes) {
+    throwStaleWriteError();
+  }
 
   appendStatusLog(orderId, helperId, order.status, ORDER_STATUS.ACCEPTED, "Order accepted");
   return getOrderById(orderId);
@@ -205,13 +222,17 @@ export function updateOrderStatus(orderId, operatorId, nextStatus) {
         ? "delivered_at"
         : "completed_at";
 
-  db.prepare(
+  const result = db.prepare(
     `
     UPDATE delivery_orders
     SET status = ?, ${timestampField} = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
-    WHERE id = ?
+    WHERE id = ? AND status = ?
     `
-  ).run(nextStatus, orderId);
+  ).run(nextStatus, orderId, order.status);
+
+  if (!result.changes) {
+    throwStaleWriteError();
+  }
 
   appendStatusLog(orderId, operatorId, order.status, nextStatus, "Status updated");
 
@@ -243,13 +264,17 @@ export function cancelOrder(orderId, requesterId, reason) {
     throw error;
   }
 
-  db.prepare(
+  const result = db.prepare(
     `
     UPDATE delivery_orders
     SET status = ?, cancelled_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
-    WHERE id = ?
+    WHERE id = ? AND status = ?
     `
-  ).run(ORDER_STATUS.CANCELLED, orderId);
+  ).run(ORDER_STATUS.CANCELLED, orderId, order.status);
+
+  if (!result.changes) {
+    throwStaleWriteError();
+  }
 
   appendStatusLog(orderId, requesterId, order.status, ORDER_STATUS.CANCELLED, reason || "Cancelled");
   return getOrderById(orderId);

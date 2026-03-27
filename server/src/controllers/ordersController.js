@@ -17,53 +17,45 @@ export function getOrderDetail(req, res) {
 }
 
 export function postOrder(req, res) {
-  const requiredFields = ["requester_id", "pickup_location", "dorm_building", "floor_no", "room_no"];
-  const missingField = requiredFields.find((field) => !req.body[field]);
+  const requiredFields = ["pickup_location", "dorm_building", "floor_no", "room_no", "service_fee"];
+  const missingField = requiredFields.find(
+    (field) => req.body[field] === undefined || req.body[field] === null || req.body[field] === ""
+  );
 
   if (missingField) {
     res.status(400).json({ message: `${missingField} is required` });
     return;
   }
 
-  res.status(201).json(createOrder(req.body));
+  res.status(201).json(createOrder({ ...req.body, requester_id: req.user.id }));
 }
 
 export function postAcceptOrder(req, res) {
-  if (!req.body.helper_id) {
-    res.status(400).json({ message: "helper_id is required" });
-    return;
-  }
-
-  res.json(acceptOrder(Number(req.params.id), Number(req.body.helper_id)));
+  res.json(acceptOrder(Number(req.params.id), req.user.id));
 }
 
 export function postOrderStatus(req, res) {
-  const { operator_id, status } = req.body;
+  const { status } = req.body;
 
-  if (!operator_id || !status) {
-    res.status(400).json({ message: "operator_id and status are required" });
+  if (!status) {
+    res.status(400).json({ message: "status is required" });
     return;
   }
 
-  res.json(updateOrderStatus(Number(req.params.id), Number(operator_id), status));
+  res.json(updateOrderStatus(Number(req.params.id), req.user.id, status));
 }
 
 export function postCancelOrder(req, res) {
-  if (!req.body.requester_id) {
-    res.status(400).json({ message: "requester_id is required" });
-    return;
-  }
-
-  res.json(cancelOrder(Number(req.params.id), Number(req.body.requester_id), req.body.reason));
+  res.json(cancelOrder(Number(req.params.id), req.user.id, req.body.reason));
 }
 
 export function getMyOrders(req, res) {
-  const { user_id, role } = req.query;
+  const { role } = req.query;
 
-  if (!user_id || !role) {
-    res.status(400).json({ message: "user_id and role are required" });
+  if (!role) {
+    res.status(400).json({ message: "role is required" });
     return;
   }
 
-  res.json(listMyOrders(Number(user_id), role));
+  res.json(listMyOrders(req.user.id, role));
 }

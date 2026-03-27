@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import http from "node:http";
+import { pathToFileURL } from "node:url";
 import authRoutes from "./routes/auth.js";
 import meRoutes from "./routes/me.js";
 import orderRoutes from "./routes/orders.js";
@@ -8,28 +10,40 @@ import reviewRoutes from "./routes/reviews.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 import "./db/index.js";
 
-const app = express();
-const port = process.env.PORT || 3000;
+export function createApp() {
+  const app = express();
 
-app.use(cors());
-app.use(express.json());
+  app.use(cors());
+  app.use(express.json());
 
-app.get("/api/health", (req, res) => {
-  res.json({
-    ok: true,
-    message: "Dorm takeaway help API is running"
+  app.get("/api/health", (req, res) => {
+    res.json({
+      ok: true,
+      message: "Dorm takeaway help API is running"
+    });
   });
-});
 
-app.use("/api/auth", authRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/me", meRoutes);
-app.use("/api/reviews", reviewRoutes);
-app.use("/api/payments", paymentRoutes);
+  app.use("/api/auth", authRoutes);
+  app.use("/api/orders", orderRoutes);
+  app.use("/api/me", meRoutes);
+  app.use("/api/reviews", reviewRoutes);
+  app.use("/api/payments", paymentRoutes);
 
-app.use(notFoundHandler);
-app.use(errorHandler);
+  app.use(notFoundHandler);
+  app.use(errorHandler);
 
-app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
-});
+  return app;
+}
+
+export function createServer(port = Number(process.env.PORT ?? 3000)) {
+  const app = createApp();
+  return http.createServer(app).listen(port, () => {
+    console.log(`Server listening on http://localhost:${port}`);
+  });
+}
+
+const isMainModule = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isMainModule) {
+  createServer();
+}

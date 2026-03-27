@@ -7,14 +7,15 @@ import {
   postOrder,
   postOrderStatus
 } from "../controllers/ordersController.js";
+import { requireAuth } from "../middleware/auth.js";
 
 const router = express.Router();
 
 router.get("/", getOrders);
-router.post("/", postOrder);
+router.post("/", requireAuth, postOrder);
 router.get("/:id", getOrderDetail);
-router.post("/:id/accept", postAcceptOrder);
-router.post("/:id/status", postOrderStatus);
-router.post("/:id/cancel", postCancelOrder);
+router.post("/:id/accept", requireAuth, postAcceptOrder);
+router.post("/:id/status", requireAuth, postOrderStatus);
+router.post("/:id/cancel", requireAuth, postCancelOrder);
 
 export default router;

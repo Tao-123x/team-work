@@ -1,18 +1,34 @@
 import db from "../db/index.js";
+import { ORDER_STATUS } from "../config/constants.js";
+import { getOrderById } from "./orderService.js";
 
 export function createManualPayment(payload) {
+  const order = getOrderById(payload.order_id);
+
+  if (order.requester_id !== payload.actor_id) {
+    const error = new Error("Only the requester can record payment");
+    error.status = 403;
+    throw error;
+  }
+
+  if (order.status !== ORDER_STATUS.COMPLETED) {
+    const error = new Error("Payment can only be recorded after completion");
+    error.status = 400;
+    throw error;
+  }
+
+  if (!order.helper_id) {
+    const error = new Error("Cannot record payment without an assigned helper");
+    error.status = 400;
+    throw error;
+  }
+
   const existing = db.prepare("SELECT * FROM payments WHERE order_id = ?").get(payload.order_id);
 
   if (existing) {
-    db.prepare(
-      `
-      UPDATE payments
-      SET amount = ?, payment_status = 'offline_confirmed', payment_method = ?, paid_at = CURRENT_TIMESTAMP
-      WHERE order_id = ?
-      `
-    ).run(payload.amount, payload.payment_method || "offline", payload.order_id);
-
-    return db.prepare("SELECT * FROM payments WHERE order_id = ?").get(payload.order_id);
+    const error = new Error("Payment has already been recorded for this order");
+    error.status = 400;
+    throw error;
   }
 
   const result = db
@@ -24,9 +40,9 @@ export function createManualPayment(payload) {
     )
     .run(
       payload.order_id,
-      payload.payer_id,
-      payload.payee_id,
-      payload.amount,
+      order.requester_id,
+      order.helper_id,
+      order.service_fee,
       payload.payment_method || "offline"
     );
 
