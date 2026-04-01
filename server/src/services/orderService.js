@@ -62,6 +62,36 @@ function appendStatusLog(orderId, operatorId, fromStatus, toStatus, actionNote =
   ).run(orderId, operatorId, fromStatus, toStatus, actionNote);
 }
 
+export function buildStatusUpdatePlan(order, operatorId, nextStatus) {
+  const allowedNextStatus = ALLOWED_STATUS_TRANSITIONS[order.status];
+
+  if (nextStatus !== allowedNextStatus) {
+    const error = new Error(`Invalid next status: ${nextStatus}`);
+    error.status = 400;
+    throw error;
+  }
+
+  if (nextStatus === ORDER_STATUS.COMPLETED) {
+    if (order.requester_id !== operatorId) {
+      const error = new Error("Only the requester can confirm completion");
+      error.status = 403;
+      throw error;
+    }
+
+    return { timestampField: "completed_at" };
+  }
+
+  if (order.helper_id !== operatorId) {
+    const error = new Error("Only the assigned helper can update this status");
+    error.status = 403;
+    throw error;
+  }
+
+  return {
+    timestampField: nextStatus === ORDER_STATUS.PICKED_UP ? "picked_up_at" : "delivered_at"
+  };
+}
+
 export function listOrders({ status = ORDER_STATUS.POSTED, dorm_building, page = 1, page_size = 20 }) {
   const offset = (Number(page) - 1) * Number(page_size);
   const clauses = [];
@@ -178,32 +208,7 @@ export function acceptOrder(orderId, helperId) {
 
 export function updateOrderStatus(orderId, operatorId, nextStatus) {
   const order = getOrderById(orderId);
-  const allowedNextStatus = ALLOWED_STATUS_TRANSITIONS[order.status];
-
-  if (nextStatus !== allowedNextStatus) {
-    const error = new Error(`Invalid next status: ${nextStatus}`);
-    error.status = 400;
-    throw error;
-  }
-
-  if (nextStatus === ORDER_STATUS.COMPLETED) {
-    if (order.requester_id !== operatorId) {
-      const error = new Error("Only the requester can confirm completion");
-      error.status = 403;
-      throw error;
-    }
-  } else if (order.helper_id !== operatorId) {
-    const error = new Error("Only the assigned helper can update this status");
-    error.status = 403;
-    throw error;
-  }
-
-  const timestampField =
-    nextStatus === ORDER_STATUS.PICKED_UP
-      ? "picked_up_at"
-      : nextStatus === ORDER_STATUS.DELIVERED
-        ? "delivered_at"
-        : "completed_at";
+  const { timestampField } = buildStatusUpdatePlan(order, operatorId, nextStatus);
 
   db.prepare(
     `
